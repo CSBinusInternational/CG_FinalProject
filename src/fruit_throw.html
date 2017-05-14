@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Stickman</title>
+    <title>Tembak bola</title>
     <script type="text/javascript" src="../lib/babylon.custom.js"></script>
     <script type="text/javascript" src="../lib/hand-1.3.7.js"></script>
     <script type="text/javascript" src="../lib/cannon2.js"></script>
-    <link rel="stylesheet" type="text/css" href="../lib/style_canvas.css" />
+    <link rel="stylesheet" type="text/css" href="../lib/style.css" />
 </head>
 <peach>
     <canvas id="canvas"></canvas>
@@ -20,7 +20,7 @@
         scene.enablePhysics(new BABYLON.Vector3(0, -9.81, 0), physicsPlugin);
         var camera2;
         camera2 = new BABYLON.ArcRotateCamera("camera2", BABYLON.Tools.ToRadians(270), BABYLON.Tools.ToRadians(45), 20, new BABYLON.Vector3.Zero(), scene);
-        camera2.setPosition(new BABYLON.Vector3(0,15,-30));
+        camera2.setPosition(new BABYLON.Vector3(0,35,-70));
         camera2.attachControl(canvas, false);
 
         var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0,5,0), scene);
@@ -33,7 +33,7 @@
         // sphere1.position = new BABYLON.Vector3(0, 5, 0);
         // sphere1.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 1, restitution: 0.0, friction: 0.0});
 
-        var peach = BABYLON.Mesh.CreateSphere("peach", 16, 2, scene);
+        var peach = BABYLON.Mesh.CreateSphere("peach", 16, 5, scene);
         peach.position = new BABYLON.Vector3(0, 1.5, 0);
         peach.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.5, friction: 1, linearDamping: 0.5});
 
@@ -65,10 +65,8 @@
         material2.alpha = 1.0;
 
         var groundMaterial = new BABYLON.StandardMaterial("groundMaterial", scene);
-        groundMaterial.diffuseTexture = new BABYLON.Texture("texture/grass.png", scene);
-        groundMaterial.specularTexture = new BABYLON.Texture("texture/doge.jpeg", scene);
-        groundMaterial.specularPower = 32;
-
+        groundMaterial.diffuseTexture = new BABYLON.Texture("grass.png", scene);
+        groundMaterial.specularPower = 1000;
         // sphere1.material = material1;
         //bcamera2.parent = pyramid;
         peach.material = material2;
@@ -101,58 +99,25 @@
       var thrown = false;
       var wind = 0;
       var change = 0;
-      var reset = false;
+
+      //ScoreBoard
+      var scoreBoard = new BABYLON.ScreenSpaceCanvas2D(scene, {
+        id: "canvas2",  parent: canvas,x:0, y:575,
+        size: new BABYLON.Size(300, 100),
+        backgroundFill: "#4040408F",
+        backgroundRoundRadius: 50,
+      });
+      var score = new BABYLON.Text2D("Score: "+point.toString()+ "  ||  Wind: "+wind.toString(), {
+          parent: scoreBoard,
+          id: "score",
+          marginAlignment: "h: center, v:center",
+          fontName: "20pt Arial",
+      });
+
       //debug
       // var radangle;
       // var radanglevertical;
       // var direction;
-      window.onkeydown = window.onkeyup = function(event){
-        event = event || window.event;
-        map[event.keyCode] = event.type == 'keydown';
-        //W
-        if(map[87] && anglevertical < 85){
-          anglevertical+=2
-        }
-        //S
-        if(map[83] && anglevertical > 0){
-          anglevertical-=2
-        }
-        //A
-        if(map[65] && angle > -90){
-          angle-=1
-        }
-        //D
-        if(map[68] && angle < 90){
-          angle+=1
-        }
-        //space - throwing
-        if(map[32]){
-          //increase power while held
-          speed+=10;
-        }else{
-          //when released, launch ball
-          if(peach.position.z <= 0 && speed > 50){
-            //remove arrow
-            arrow.position.y = -100;
-            //apply wind
-            phyEng.setGravity(new BABYLON.Vector3(wind, -9.81, 0));
-            thrown = true;
-            //finding throw direction
-            var radangle = BABYLON.Tools.ToRadians(angle);
-            var radanglevertical = BABYLON.Tools.ToRadians(anglevertical);
-            var direction = new BABYLON.Vector3(speed * Math.sin(radangle), speed * Math.tan(radanglevertical), speed * Math.cos(radangle));
-            direction.scaleInPlace(speed / Math.sqrt(speed * Math.sin(radangle) * speed * Math.sin(radangle) + speed * Math.tan(radanglevertical) * speed * Math.tan(radanglevertical) + speed * Math.cos(radangle) * speed * Math.cos(radangle)));
-            //throwing
-            peach.applyImpulse(direction, peach.position);
-            //reset speed
-            speed = 50;
-          }
-        }
-        //R - reset object
-        if(map[82]){
-          reset = true;
-        }
-      }
 
       engine.runRenderLoop(function(){
         if(thrown){
@@ -160,19 +125,86 @@
           change = Math.random()*10;
           if(change <=3){
             wind = Math.floor(Math.random()*10.9)-5;
+            score.text = "Score: "+point.toString()+ "  ||  Wind: "+wind.toString();
+          }
+        }
+        window.onkeydown = window.onkeyup = function(event){
+          event = event || window.event;
+          map[event.keyCode] = event.type == 'keydown';
+          //W
+          if(map[87] && anglevertical < 85){
+            anglevertical+=2
+          }
+          //S
+          if(map[83] && anglevertical > 0){
+            anglevertical-=2
+          }
+          //A
+          if(map[65] && angle > -90){
+            angle-=1
+          }
+          //D
+          if(map[68] && angle < 90){
+            angle+=1
+          }
+          //space - throwing
+          if(map[32]){
+            //increase power while held
+            speed+=10;
+          }else{
+            //when released, launch ball
+            if(peach.position.z <= 0 && speed > 50){
+              //remove arrow
+              arrow.position.y = -100;
+              //apply wind
+              phyEng.setGravity(new BABYLON.Vector3(wind, -9.81, 0));
+              thrown = true;
+              //finding throw direction
+              var radangle = BABYLON.Tools.ToRadians(angle);
+              var radanglevertical = BABYLON.Tools.ToRadians(anglevertical);
+              var direction = new BABYLON.Vector3(speed * Math.sin(radangle), speed * Math.tan(radanglevertical), speed * Math.cos(radangle));
+              direction.scaleInPlace(speed / Math.sqrt(speed * Math.sin(radangle) * speed * Math.sin(radangle) + speed * Math.tan(radanglevertical) * speed * Math.tan(radanglevertical) + speed * Math.cos(radangle) * speed * Math.cos(radangle)));
+              //throwing
+              peach.applyImpulse(direction, peach.position);
+              //reset speed
+              speed = 50;
+            }
+          }
+          //R - reset object
+          if(map[82]){
+            //remove then create new peach object
+            peach.dispose();
+            peach = BABYLON.Mesh.CreateSphere("peach", 16, 2, scene);
+            peach.position = new BABYLON.Vector3(0, 1.5, 0);
+            peach.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.5, friction: 1, linearDamping: 0.5});
+
+            var material2 = new BABYLON.StandardMaterial("material2",scene);
+            material2.diffuseColor = BABYLON.Color3.Red();
+            material2.emmisiveColor = BABYLON.Color3.Red();
+            material2.alpha = 1.0;
+            peach.material = scene.getMaterialByName("material2");
+
+            //return arrow
+            arrow.position.y = 1;
+
+            //remove wind
+            phyEng.setGravity(new BABYLON.Vector3(0, -9.81, 0));
+
+            //reset speed
+            speed = 50;
+            // peach.position = new BABYLON.Vector3(0, 1.5, 0);
+            // peach.mass = 0;
+            // peach.updateMassProperties();
+            // peach.velocity.set(0,0,0);
+            // peach.angularVelocity.set(0,0,0);
           }
         }
         //if touch goal
         if(peach.intersectsMesh(goal, false)){
           //increase point
           point++;
-          //reset
-          reset = true;
-        }
-
-        if(reset){
+          score.text = "Score: "+point.toString()+ "  ||  Wind: "+wind.toString();
           //reset peach
-          reset = false;
           peach.dispose();
           peach = BABYLON.Mesh.CreateSphere("peach", 16, 2, scene);
           peach.position = new BABYLON.Vector3(0, 1.5, 0);
