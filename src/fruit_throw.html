@@ -72,12 +72,15 @@
         peach.material = material2;
         ground.material = groundMaterial;
 
+        var model;
         BABYLON.SceneLoader.ImportMesh("","assets/", "apple.babylon", scene, function (newMeshes, particleSystems) {
-  		    model = newMeshes[0];
-  		    model.position = new BABYLON.Vector3(0, 5, 0);
-          model.scaling = new BABYLON.Vector3(100, 100, 100);
-        });
+          model = newMeshes[0];
+          console.log(model.scaling.x);
+          model.scaling = new BABYLON.Vector3(40, 40, 40);
+          model.position = new BABYLON.Vector3(0, 0, 0);
+          model.parent = peach;
 
+        });
         // camera2 = new BABYLON.FollowCamera("camera2", new BABYLON.Vector3(0,15,-30), scene);
         // camera2.lockedTarget = sphere1;
         // camera2.radius = 30;
@@ -202,7 +205,7 @@
         if(thrown){
           thrown = false;
           change = Math.random()*10;
-          if(change <=5){
+          if(change <= 4){
             wind = Math.floor(Math.random()*10.9)-5;
           }
         }
