@@ -1,0 +1,48 @@
+	Exporter version: 4.6.1, Blender version: 2.78 (sub 0)
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used:
+		selected layers only:  false
+		flat shading entire scene:  false
+		inline textures:  false
+		texture directory:  C:\Users\Cason Kang\Desktop\Binus\semester 4\CG\final project\CG_FinalProject\lib\
+	Python World class constructor completed
+	processing begun of mesh:  Cylinder001
+		processing begun of Standard material:  wire_177088027
+		num positions      :  218
+		num normals        :  218
+		num uvs            :  436
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  636
+	processing begun of mesh:  Sphere001
+		processing begun of Standard material:  wire_135006006
+		num positions      :  1552
+		num normals        :  1552
+		num uvs            :  3104
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  7488
+	processing begun of camera (FreeCamera):  Camera
+	processing begun of camera (FreeCamera):  Camera.001
+	processing begun of mesh:  Cylinder001.001
+		processing begun of Standard material:  wire_177088027.001
+		num positions      :  218
+		num normals        :  218
+		num uvs            :  436
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  636
+	processing begun of mesh:  Sphere001.001
+		processing begun of Standard material:  wire_135006006.001
+		num positions      :  1552
+		num normals        :  1552
+		num uvs            :  3104
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  7488
+	processing begun of light (POINT):  Lamp
+	processing begun of light (POINT):  Lamp.001
+========= Writing of scene file started =========
+========= Writing of scene file completed =========
+========= end of processing =========
+elapsed time:  0 min, 0.18 secs
