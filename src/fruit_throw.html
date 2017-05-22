@@ -14,7 +14,7 @@
       var canvas = document.getElementById("canvas");
       var engine = new BABYLON.Engine(canvas, true);
 
-      var createScene = function(){
+      // var createScene = function(){
         var scene = new BABYLON.Scene(engine);
         var physicsPlugin = new BABYLON.CannonJSPlugin();
         scene.enablePhysics(new BABYLON.Vector3(0, -9.81, 0), physicsPlugin);
@@ -29,13 +29,13 @@
         var ground = BABYLON.Mesh.CreateGround("ground", 1000, 1000, 2, scene);
         ground.setPhysicsState({impostor: BABYLON.PhysicsEngine.BoxImpostor, mass: 0, restitution: 0.5, friction: 0.1});
 
-        // var sphere1 = BABYLON.Mesh.CreateSphere("sphere1", 16, 2, scene);
-        // sphere1.position = new BABYLON.Vector3(0, 5, 0);
-        // sphere1.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 1, restitution: 0.0, friction: 0.0});
+        // var sphere1 = BABYLON.Mesh.CreateSphere("sphere1", 16, 5, scene);
+        // sphere1.position = new BABYLON.Vector3(0, 3, 10);
+        // sphere1.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.5, friction: 1});
 
-        var peach = BABYLON.Mesh.CreateSphere("peach", 16, 5, scene);
-        peach.position = new BABYLON.Vector3(0, 1.5, 0);
-        peach.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.5, friction: 1, linearDamping: 0.5});
+        // var peach = BABYLON.Mesh.CreateSphere("peach", 16, 5, scene);
+        // peach.position = new BABYLON.Vector3(0, 1.5, 0);
+        // peach.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.5, friction: 1, linearDamping: 0.5});
 
         var arrow = BABYLON.Mesh.CreateBox("arrow", 0.5, scene);
         arrow.scaling.z = 20;
@@ -68,37 +68,67 @@
         groundMaterial.diffuseTexture = new BABYLON.Texture("texture/grass.png", scene);
         groundMaterial.specularPower = 1000;
         // sphere1.material = material1;
-        //bcamera2.parent = pyramid;
-        peach.material = material2;
+        // peach.material = material2;
         ground.material = groundMaterial;
 
-        var model;
-        BABYLON.SceneLoader.ImportMesh("","assets/", "apple.babylon", scene, function (newMeshes, particleSystems) {
-          model = newMeshes[0];
-          console.log(model.scaling.x);
-          model.scaling = new BABYLON.Vector3(40, 40, 40);
-          model.position = new BABYLON.Vector3(0, 0, 0);
-          model.parent = peach;
 
+
+        var peach;
+        var peachImpostor;
+        BABYLON.SceneLoader.ImportMesh("","assets/", "apple.babylon", scene, function (newMeshes, particleSystems) {
+          peach = newMeshes[0];
+          console.log(peach.scaling.x);
+          peach.scaling = new BABYLON.Vector3(40, 40, 40);
+          peach.position = new BABYLON.Vector3(0, 3, 0);
+          peachImpostor = peach.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.5, friction: 1, linearDamping: 0.5});
+          peach.material = material2;
         });
         // camera2 = new BABYLON.FollowCamera("camera2", new BABYLON.Vector3(0,15,-30), scene);
         // camera2.lockedTarget = sphere1;
         // camera2.radius = 30;
         // camera2.heightOffset = 8;
         // camera2.rotationOffset = 180;
+        scene.registerBeforeRender(function () {
+      		if (peach) {
+            if(peach.intersectsMesh(goal, false)){
+              //increase point
+              point++;
+              score.text = "Score: "+point.toString()+ "  ||  Wind: "+wind.toString();
+              //reset peach
+              peach.dispose();
+              peach = BABYLON.Mesh.CreateSphere("peach", 16, 2, scene);
+              peach.position = new BABYLON.Vector3(0, 1.5, 0);
+              peach.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.5, friction: 1, linearDamping: 0.5});
 
-        return scene;
-      }
+              var material2 = new BABYLON.StandardMaterial("material2",scene);
+              material2.diffuseColor = BABYLON.Color3.Red();
+              material2.emmisiveColor = BABYLON.Color3.Red();
+              material2.alpha = 1.0;
+              peach.material = scene.getMaterialByName("material2");
+
+              //return arrow
+              arrow.position.y = 1;
+
+              //reset wind
+              phyEng.setGravity(new BABYLON.Vector3(0, -9.81, 0));
+
+              //reset speed
+              speed = 50;
+            }
+      		}
+        });
+      //   return scene;
+      // }
 
 
-      var scene = createScene();
+      // var scene = createScene();
       var switcher = 1;
       var map = {};
-      var point = -1;
+      var point = 0;
 
-      var peach = scene.getMeshByName("peach");
-      var arrow = scene.getMeshByName("arrow");
-      var goal = scene.getMeshByName("goal");
+      // var peach = scene.getMeshByName("peach");
+      // var arrow = scene.getMeshByName("arrow");
+      // var goal = scene.getMeshByName("goal");
 
       var speed = 50;
       //adjust direction of throw
@@ -108,7 +138,7 @@
       var thrown = false;
       var wind = 0;
       var change = 0;
-
+      var incr = 5;
       //ScoreBoard
       var scoreBoard = new BABYLON.ScreenSpaceCanvas2D(scene, {
         id: "canvas2",  parent: canvas,x:0, y:575,
@@ -150,8 +180,15 @@
         //space - throwing
         if(map[32]){
           //increase power while held
-          speed+=10;
-        }else{
+          if(speed > 250){
+            incr = incr * -1;
+          }
+          if(speed <= 0){
+            incr = incr * -1;
+          }
+
+          speed += incr;
+        }else if(map[32] == false){
           //when released, launch ball
           if(peach.position.z <= 0 && speed > 50){
             //remove arrow
@@ -174,10 +211,13 @@
         if(map[82]){
           //remove then create new peach object
           score.text = "Score: "+point.toString()+ "  ||  Wind: "+wind.toString();
-          peach.dispose();
-          peach = BABYLON.Mesh.CreateSphere("peach", 16, 2, scene);
-          peach.position = new BABYLON.Vector3(0, 1.5, 0);
-          peach.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.5, friction: 1, linearDamping: 0.5});
+          // peach.dispose();
+          // peach = BABYLON.Mesh.CreateSphere("peach", 16, 2, scene);
+          peachImpostor.velocity = new BABYLON.Vector3(0.1, 0.1, 0.1);
+          peach.position = new BABYLON.Vector3(0, 3, 0);
+          peach.updatePhysicsBodyPosition();
+
+          // peach.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.5, friction: 1, linearDamping: 0.5});
 
           var material2 = new BABYLON.StandardMaterial("material2",scene);
           material2.diffuseColor = BABYLON.Color3.Red();
@@ -211,31 +251,31 @@
         }
 
         //if touch goal
-        if(peach.intersectsMesh(goal, false)){
-          //increase point
-          point++;
-          score.text = "Score: "+point.toString()+ "  ||  Wind: "+wind.toString();
-          //reset peach
-          peach.dispose();
-          peach = BABYLON.Mesh.CreateSphere("peach", 16, 2, scene);
-          peach.position = new BABYLON.Vector3(0, 1.5, 0);
-          peach.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.5, friction: 1, linearDamping: 0.5});
-
-          var material2 = new BABYLON.StandardMaterial("material2",scene);
-          material2.diffuseColor = BABYLON.Color3.Red();
-          material2.emmisiveColor = BABYLON.Color3.Red();
-          material2.alpha = 1.0;
-          peach.material = scene.getMaterialByName("material2");
-
-          //return arrow
-          arrow.position.y = 1;
-
-          //reset wind
-          phyEng.setGravity(new BABYLON.Vector3(0, -9.81, 0));
-
-          //reset speed
-          speed = 50;
-        }
+        // if(peach.intersectsMesh(goal, false)){
+        //   //increase point
+        //   point++;
+        //   score.text = "Score: "+point.toString()+ "  ||  Wind: "+wind.toString();
+        //   //reset peach
+        //   peach.dispose();
+        //   peach = BABYLON.Mesh.CreateSphere("peach", 16, 2, scene);
+        //   peach.position = new BABYLON.Vector3(0, 1.5, 0);
+        //   peach.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.5, friction: 1, linearDamping: 0.5});
+        //
+        //   var material2 = new BABYLON.StandardMaterial("material2",scene);
+        //   material2.diffuseColor = BABYLON.Color3.Red();
+        //   material2.emmisiveColor = BABYLON.Color3.Red();
+        //   material2.alpha = 1.0;
+        //   peach.material = scene.getMaterialByName("material2");
+        //
+        //   //return arrow
+        //   arrow.position.y = 1;
+        //
+        //   //reset wind
+        //   phyEng.setGravity(new BABYLON.Vector3(0, -9.81, 0));
+        //
+        //   //reset speed
+        //   speed = 50;
+        // }
         //changing direction of arrow
         arrow.rotation.y = BABYLON.Tools.ToRadians(angle);
         arrow.rotation.x = BABYLON.Tools.ToRadians(-anglevertical);
