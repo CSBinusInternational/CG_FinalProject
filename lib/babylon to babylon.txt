@@ -1,0 +1,4 @@
+BABYLON.SceneLoader.ImportMesh("","", "manusia.babylon", scene, function (newMeshes, particleSystems) {
+		    model = newMeshes[0];
+		    model.position = new BABYLON.Vector3(0, 0, 0);
+    });
