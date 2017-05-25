@@ -200,14 +200,27 @@
       });
       //Power
       var powerBoard = new BABYLON.ScreenSpaceCanvas2D(scene, {
-        id: "canvas3",  parent: canvas,x:w-300, y:h-100,
+        id: "canvas3",  parent: canvas,x:w-300, y:h-200,
         size: new BABYLON.Size(300, 100),
         backgroundFill: "#4040408F",
         backgroundRoundRadius: 50,
       });
-      var power = new BABYLON.Text2D("0", {
+      var power = new BABYLON.Text2D("Power: 0", {
           parent: powerBoard,
           id: "speed",
+          marginAlignment: "h: center, v:center",
+          fontName: "20pt Arial",
+      });
+      //Life
+      var lifeBoard = new BABYLON.ScreenSpaceCanvas2D(scene, {
+        id: "canvas4",  parent: canvas,x:w-300, y:h-100,
+        size: new BABYLON.Size(300, 100),
+        backgroundFill: "#4040408F",
+        backgroundRoundRadius: 50,
+      });
+      var nyawa = new BABYLON.Text2D("Life: 5", {
+          parent: lifeBoard,
+          id: "nyawa",
           marginAlignment: "h: center, v:center",
           fontName: "20pt Arial",
       });
@@ -303,6 +316,18 @@
 
           //reduce life
           life--;
+          if(life<=0){
+            var buttonRect = new BABYLON.Rectangle2D(
+            {   parent: canvas, id: "button", x:0, y:0, width: w, height: h, 
+                fill: "#40C040FF",
+                      children: 
+                              [
+                                new BABYLON.Text2D("Click Me!", { marginAlignment: "h: center, v: center" })
+                              ]
+            });
+          }
+          nyawa.text="Life: "+life.toString();
+          
         }
       }
 
