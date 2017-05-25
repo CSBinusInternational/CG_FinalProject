@@ -139,8 +139,10 @@
       var change = 0;
       var incr = 5;
       //ScoreBoard
+      var w = window.innerWidth;
+      var h = window.innerHeight;
       var scoreBoard = new BABYLON.ScreenSpaceCanvas2D(scene, {
-        id: "canvas2",  parent: canvas,x:0, y:575,
+        id: "canvas2",  parent: canvas,x:0, y:h-100,
         size: new BABYLON.Size(300, 100),
         backgroundFill: "#4040408F",
         backgroundRoundRadius: 50,
@@ -153,7 +155,7 @@
       });
       //Power
       var powerBoard = new BABYLON.ScreenSpaceCanvas2D(scene, {
-        id: "canvas3",  parent: canvas,x:1000, y:575,
+        id: "canvas3",  parent: canvas,x:w-300, y:h-100,
         size: new BABYLON.Size(300, 100),
         backgroundFill: "#4040408F",
         backgroundRoundRadius: 50,
