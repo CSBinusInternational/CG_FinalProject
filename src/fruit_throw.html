@@ -52,6 +52,14 @@
         var materialInvisible = new BABYLON.StandardMaterial("material1",scene);
         materialInvisible.alpha = 0;
 
+        var cage[5];
+        for (var block in cage) {
+          block = BABYLON.Mesh.CreateBox("arrow", 0.5, scene);
+        }
+        for (var i = 1; i < cage.length; i++) {
+          cage[i].parent = cage[0];
+        }
+
         basket.material = materialInvisible;
         goal.material = materialInvisible;
 
@@ -93,12 +101,14 @@
           //basketModel.material = materialBasket;
         });
 
-        BABYLON.SceneLoader.ImportMesh("","assets/", "basket.babylon", scene, function (newMeshes, particleSystems) {
-          var thing = newMeshes[2];
-          thing.position = new BABYLON.Vector3(0, -10, 0);
-          basketModel = newMeshes[1];
-          basketModel.scaling = new BABYLON.Vector3(0.1, 0.1, 0.12);
-          basketModel.position = new BABYLON.Vector3(0, 0, 150);
+        var manyApples;
+        BABYLON.SceneLoader.ImportMesh("","assets/", "manyApples.babylon", scene, function (manyApples, particleSystems) {
+          manyApples = manyApples[0];
+          manyApples.scaling = new BABYLON.Vector3(75, 75, 75);
+          manyApples.position = new BABYLON.Vector3(-6.3, 20, 149);
+          manyApples.rotation.z = BABYLON.Tools.ToRadians(-35);
+          manyApples.rotation.x = BABYLON.Tools.ToRadians(-99);
+          manyApples.material = material2;
           //basketModel.material = materialBasket;
         });
 
@@ -138,6 +148,7 @@
       var wind = 0;
       var change = 0;
       var incr = 5;
+      var life = 5;
       //ScoreBoard
       var w = window.innerWidth;
       var h = window.innerHeight;
@@ -245,6 +256,9 @@
 
           //reset speed
           speed = 50;
+
+          //reduce life
+          life--;
         }
       }
 
