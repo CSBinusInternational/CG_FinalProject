@@ -52,14 +52,7 @@
         var materialInvisible = new BABYLON.StandardMaterial("material1",scene);
         materialInvisible.alpha = 0;
 
-        var cage[5];
-        for (var block in cage) {
-          block = BABYLON.Mesh.CreateBox("arrow", 0.5, scene);
-        }
-        for (var i = 1; i < cage.length; i++) {
-          cage[i].parent = cage[0];
-        }
-
+        var wall = BABYLON.Mesh.CreateBox("arrow", 0.5, scene);
         basket.material = materialInvisible;
         goal.material = materialInvisible;
 
@@ -150,10 +143,8 @@
       var incr = 5;
       var life = 5;
       //ScoreBoard
-      var w = window.innerWidth;
-      var h = window.innerHeight;
       var scoreBoard = new BABYLON.ScreenSpaceCanvas2D(scene, {
-        id: "canvas2",  parent: canvas,x:0, y:h-100,
+        id: "canvas2",  parent: canvas,x:0, y:575,
         size: new BABYLON.Size(300, 100),
         backgroundFill: "#4040408F",
         backgroundRoundRadius: 50,
@@ -166,7 +157,7 @@
       });
       //Power
       var powerBoard = new BABYLON.ScreenSpaceCanvas2D(scene, {
-        id: "canvas3",  parent: canvas,x:w-300, y:h-100,
+        id: "canvas3",  parent: canvas,x:1000, y:575,
         size: new BABYLON.Size(300, 100),
         backgroundFill: "#4040408F",
         backgroundRoundRadius: 50,
@@ -211,7 +202,7 @@
           //Changing the speed into percent
           var percent = Math.floor((speed/250)*100);
           power.text="Speed: "+percent.toString()+"%";
-        
+
         }else if(map[32] == false){
           //when released, launch ball
           if(peach.position.z <= 0 && speed > 50){
