@@ -151,6 +151,19 @@
           marginAlignment: "h: center, v:center",
           fontName: "20pt Arial",
       });
+      //Power
+      var powerBoard = new BABYLON.ScreenSpaceCanvas2D(scene, {
+        id: "canvas3",  parent: canvas,x:1000, y:575,
+        size: new BABYLON.Size(300, 100),
+        backgroundFill: "#4040408F",
+        backgroundRoundRadius: 50,
+      });
+      var power = new BABYLON.Text2D("0", {
+          parent: powerBoard,
+          id: "speed",
+          marginAlignment: "h: center, v:center",
+          fontName: "20pt Arial",
+      });
 
       window.onkeydown = window.onkeyup = function(event){
         event = event || window.event;
@@ -182,6 +195,10 @@
           }
 
           speed += incr;
+          //Changing the speed into percent
+          var percent = Math.floor((speed/250)*100);
+          power.text="Speed: "+percent.toString()+"%";
+        
         }else if(map[32] == false){
           //when released, launch ball
           if(peach.position.z <= 0 && speed > 50){
