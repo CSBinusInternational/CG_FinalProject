@@ -44,17 +44,46 @@
         basket.position = new BABYLON.Vector3(0, 10, 150)
         basket.setPhysicsState({impostor: BABYLON.PhysicsEngine.CylinderImpostor, mass: 0, restitution: 0.5, friction: 10});
 
-
         var goal = BABYLON.MeshBuilder.CreateCylinder("goal", {diameterTop: 26.5, height: 1, diameterBottom: 26.5, tessellation: 16}, scene);
         goal.position = new BABYLON.Vector3(0, 20.7, 150)
         goal.setPhysicsState({impostor: BABYLON.PhysicsEngine.CylinderImpostor, mass: 0, restitution: 0.5, friction: 10});
 
+        var wall = BABYLON.Mesh.CreateBox("wall", 5, scene);
+        wall.position = new BABYLON.Vector3(0, 2.5, 4.3);
+
+        var wall2 = BABYLON.Mesh.CreateBox("wall2", 5, scene);
+        //wall2.parent = wall;
+        wall2.position = new BABYLON.Vector3(-4.3, 2.5, 0);
+
+        var wall3 = BABYLON.Mesh.CreateBox("wall3", 5, scene);
+        //wall3.parent = wall;
+        wall3.position = new BABYLON.Vector3(4.3, 2.5, 0);
+
+        var wall4 = BABYLON.Mesh.CreateBox("wall4", 5, scene);
+        //wall4.parent = wall;
+        wall4.position = new BABYLON.Vector3(0, 6.5, 0);
+
+        var wall5 = BABYLON.Mesh.CreateBox("wall5", 5, scene);
+        //wall5.parent = wall;
+        wall5.position = new BABYLON.Vector3(0, 2.5, -4.3);
+
+        wall.setPhysicsState({impostor: BABYLON.PhysicsEngine.BoxImpostor, mass: 0, restitution: 0.1, friction: 10});
+        wall2.setPhysicsState({impostor: BABYLON.PhysicsEngine.BoxImpostor, mass: 0, restitution: 0.1, friction: 10});
+        wall4.setPhysicsState({impostor: BABYLON.PhysicsEngine.BoxImpostor, mass: 0, restitution: 0.1, friction: 10});
+        wall3.setPhysicsState({impostor: BABYLON.PhysicsEngine.BoxImpostor, mass: 0, restitution: 0.1, friction: 10});
+        wall5.setPhysicsState({impostor: BABYLON.PhysicsEngine.BoxImpostor, mass: 0, restitution: 0.1, friction: 10});
+
+
         var materialInvisible = new BABYLON.StandardMaterial("material1",scene);
         materialInvisible.alpha = 0;
 
-        var wall = BABYLON.Mesh.CreateBox("arrow", 0.5, scene);
         basket.material = materialInvisible;
         goal.material = materialInvisible;
+        wall2.material = materialInvisible;
+        wall3.material = materialInvisible;
+        wall4.material = materialInvisible;
+        wall.material = materialInvisible;
+        wall5.material = materialInvisible;
 
         var material2 = new BABYLON.StandardMaterial("material2",scene);
         material2.diffuseColor = BABYLON.Color3.Red();
@@ -80,7 +109,7 @@
           console.log(peach.scaling.x);
           peach.scaling = new BABYLON.Vector3(40, 40, 40);
           peach.position = new BABYLON.Vector3(0, 3, 0);
-          peachImpostor = peach.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.5, friction: 1, linearDamping: 0.5});
+          peachImpostor = peach.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.1, friction: 1, linearDamping: 0.5});
           peach.material = material2;
         });
 
@@ -112,8 +141,20 @@
               point++;
               score.text = "Score: "+point.toString()+ "  ||  Wind: "+wind.toString();
               //reset peach
-              peach.position = new BABYLON.Vector3(0, 3, 0);
+              wall.position.y = 2.5;
+              wall2.position.y = 2.5;
+              wall3.position.y = 2.5;
+              wall4.position.y = 6.5;
+              wall5.position.y = 2.5;
 
+              wall.updatePhysicsBodyPosition();
+              wall2.updatePhysicsBodyPosition();
+              wall3.updatePhysicsBodyPosition();
+              wall4.updatePhysicsBodyPosition();
+              wall5.updatePhysicsBodyPosition();
+
+              peach.position = new BABYLON.Vector3(0, 2.5, 0);
+              peach.updatePhysicsBodyPosition();
               //return arrow
               arrow.position.y = 1;
 
@@ -204,10 +245,15 @@
           //Changing the speed into percent
           var percent = Math.floor((speed/250)*100);
           power.text="Speed: "+percent.toString()+"%";
+          wall.position.y = -100;
+          wall2.position.y = -100;
+          wall3.position.y = -100;
+          wall4.position.y = -100;
+          wall5.position.y = -100;
 
         }else if(map[32] == false){
           //when released, launch ball
-          if(peach.position.z <= 0 && speed > 50){
+          if(peach.position.z <= 1 && speed > 50){
             //remove arrow
             arrow.position.y = -100;
             //apply wind
@@ -230,16 +276,21 @@
           score.text = "Score: "+point.toString()+ "  ||  Wind: "+wind.toString();
           // peach.dispose();
           // peach = BABYLON.Mesh.CreateSphere("peach", 16, 2, scene);
-          peach.position = new BABYLON.Vector3(0, 3, 0);
+
+          wall.position.y = 2.5;
+          wall2.position.y = 2.5;
+          wall3.position.y = 2.5;
+          wall4.position.y = 6.5;
+          wall5.position.y = 2.5;
+          wall.updatePhysicsBodyPosition();
+          wall2.updatePhysicsBodyPosition();
+          wall3.updatePhysicsBodyPosition();
+          wall4.updatePhysicsBodyPosition();
+          wall5.updatePhysicsBodyPosition();
+
+          peach.position = new BABYLON.Vector3(0, 2.5, 0);
           peach.updatePhysicsBodyPosition();
 
-          // peach.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.5, friction: 1, linearDamping: 0.5});
-
-          var material2 = new BABYLON.StandardMaterial("material2",scene);
-          material2.diffuseColor = BABYLON.Color3.Red();
-          material2.emmisiveColor = BABYLON.Color3.Red();
-          material2.alpha = 1.0;
-          peach.material = scene.getMaterialByName("material2");
 
           //return arrow
           arrow.position.y = 1;
