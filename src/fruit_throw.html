@@ -247,11 +247,11 @@
         //space - throwing
         if(map[32]){
           //increase power while held
-          if(speed > 350){
-            incr = incr * -0.5;
+          if(speed >= 350){
+            incr = incr * -1;
           }
-          if(speed <= 0){
-            incr = incr * -0.5;
+          else if(speed <= 0){
+            incr = incr * -1;
           }
 
           speed += incr;
@@ -313,6 +313,11 @@
           //reset speed
           speed = 50;
 
+          function cason()
+          {
+            location.reload();
+          }
+
           //reduce life
           life--;
           //game over screen
@@ -328,7 +333,8 @@
               marginAlignment: "h: center, v:center",
               fontName: "20pt Arial",
               });
-            setTimeout(location.reload(), 3000);
+            setTimeout(function(){
+              cason();}, 3000);
           }
           nyawa.text="Life: "+life.toString();
           
