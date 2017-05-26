@@ -99,8 +99,11 @@
         var groundMaterial = new BABYLON.StandardMaterial("groundMaterial", scene);
         groundMaterial.diffuseTexture = new BABYLON.Texture("texture/grass.png", scene);
         groundMaterial.specularPower = 10000;
+        groundMaterial.diffuseTexture.uScale = 5.0;
+        groundMaterial.diffuseTexture.vScale = 5.0;
 
         ground.material = groundMaterial;
+
 
         var peach;
         var peachImpostor;
@@ -138,6 +141,7 @@
       		if (peach) {
             if(peach.intersectsMesh(goal, false)){
               //increase point
+              var yay = new BABYLON.Sound("yay", "assets/sound/yay.mp3", scene, null, { loop: false, autoplay: true, volume: 0.5});
               point++;
               score.text = "Score: "+point.toString()+ "  ||  Wind: "+wind.toString();
               //reset peach
@@ -225,6 +229,9 @@
           fontName: "20pt Arial",
       });
 
+      //Background music
+      var bgm = new BABYLON.Sound("BGM", "assets/sound/bgm.mp3", scene, null, { loop: true, autoplay: true, volume: 0.1});
+
       window.onkeydown = window.onkeyup = function(event){
         event = event || window.event;
         map[event.keyCode] = event.type == 'keydown';
@@ -288,7 +295,6 @@
         if(map[82]){
           //remove then create new peach object
           score.text = "Score: "+point.toString()+ "  ||  Wind: "+wind.toString();
-
           wall.position.y = 2.5;
           wall2.position.y = 2.5;
           wall3.position.y = 2.5;
@@ -313,7 +319,7 @@
           //reset speed
           speed = 50;
 
-          function cason()
+          function reloadPage()
           {
             location.reload();
           }
@@ -322,6 +328,8 @@
           life--;
           //game over screen
           if(life==0){
+            bgm.stop();
+            var end = new BABYLON.Sound("gameEnd", "assets/sound/end.mp3", scene, null, { loop: false, autoplay: true, volume: 0.5});
             var gameOver = new BABYLON.ScreenSpaceCanvas2D(scene, {
             id: "canvas5",  parent: canvas,x:0, y:0,
             size: new BABYLON.Size(w, h),
@@ -334,7 +342,7 @@
               fontName: "20pt Arial",
               });
             setTimeout(function(){
-              cason();}, 3000);
+              reloadPage();}, 4000);
           }
           nyawa.text="Life: "+life.toString();
           
