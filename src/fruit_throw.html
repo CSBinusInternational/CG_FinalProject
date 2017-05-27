@@ -90,6 +90,11 @@
         material2.emmisiveColor = BABYLON.Color3.Red();
         material2.alpha = 1.0;
 
+        var materialBlue = new BABYLON.StandardMaterial("material2",scene);
+        materialBlue.diffuseColor = BABYLON.Color3.Blue();
+        materialBlue.emmisiveColor = BABYLON.Color3.Blue();
+        materialBlue.alpha = 1.0;
+
         var materialBasket = new BABYLON.StandardMaterial("materialBasket", scene);
         materialBasket.diffuseColor = new BABYLON.Color3(42, 21, 21);
         materialBasket.emmisiveColor = new BABYLON.Color3(165, 42, 42);
@@ -103,7 +108,6 @@
         groundMaterial.diffuseTexture.vScale = 5.0;
 
         ground.material = groundMaterial;
-
 
         var peach;
         var peachImpostor;
@@ -123,7 +127,7 @@
           basketModel = newMeshes[1];
           basketModel.scaling = new BABYLON.Vector3(0.1, 0.1, 0.12);
           basketModel.position = new BABYLON.Vector3(0, 0, 150);
-          //basketModel.material = materialBasket;
+          basketModel.material = materialBlue;
         });
 
         var manyApples;
@@ -356,7 +360,7 @@
               reloadPage();}, 4000);
           }
           nyawa.text="Life: "+life.toString();
-          
+
         }
       }
 
