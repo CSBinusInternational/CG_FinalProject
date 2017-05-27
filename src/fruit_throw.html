@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tembak bola</title>
+    <title>The Furious Farmer</title>
     <script type="text/javascript" src="../lib/babylon.custom.js"></script>
     <script type="text/javascript" src="../lib/hand-1.3.7.js"></script>
     <script type="text/javascript" src="../lib/cannon2.js"></script>
@@ -29,14 +29,6 @@
         var ground = BABYLON.Mesh.CreateGround("ground", 1000, 1000, 2, scene);
         ground.setPhysicsState({impostor: BABYLON.PhysicsEngine.BoxImpostor, mass: 0, restitution: 0.5, friction: 0.1});
 
-        // var sphere1 = BABYLON.Mesh.CreateSphere("sphere1", 16, 5, scene);
-        // sphere1.position = new BABYLON.Vector3(0, 3, 10);
-        // sphere1.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.5, friction: 1});
-
-        // var peach = BABYLON.Mesh.CreateSphere("peach", 16, 5, scene);
-        // peach.position = new BABYLON.Vector3(0, 1.5, 0);
-        // peach.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.5, friction: 1, linearDamping: 0.5});
-
         var arrow = BABYLON.Mesh.CreateBox("arrow", 0.5, scene);
         arrow.scaling.z = 20;
         arrow.position = new BABYLON.Vector3(0, 1, 0);
@@ -48,31 +40,72 @@
         arrowhead.scaling.y = 1/20;
         arrowhead.parent = arrow;
 
-        var goal = BABYLON.Mesh.CreateBox("goal", 4, scene);
-        goal.position = new BABYLON.Vector3(0, 2, 200);
+        var basket = BABYLON.MeshBuilder.CreateCylinder("basket", {diameterTop: 27.5, height: 21, diameterBottom: 21, tessellation: 16}, scene);
+        basket.position = new BABYLON.Vector3(0, 10, 150)
+        basket.setPhysicsState({impostor: BABYLON.PhysicsEngine.CylinderImpostor, mass: 0, restitution: 0.5, friction: 10});
 
-        var material1 = new BABYLON.StandardMaterial("material1",scene);
-        material1.diffuseColor = BABYLON.Color3.Blue();
-        material1.emmisiveColor = BABYLON.Color3.Blue();
-        material1.specularColor = new BABYLON.Color3(0,0,0);
-        material1.specularPower = 5;
-        material1.alpha = 1.0;
+        var goal = BABYLON.MeshBuilder.CreateCylinder("goal", {diameterTop: 26.5, height: 1, diameterBottom: 26.5, tessellation: 16}, scene);
+        goal.position = new BABYLON.Vector3(0, 20.7, 150)
+        goal.setPhysicsState({impostor: BABYLON.PhysicsEngine.CylinderImpostor, mass: 0, restitution: 0.5, friction: 10});
+
+        var wall = BABYLON.Mesh.CreateBox("wall", 5, scene);
+        wall.position = new BABYLON.Vector3(0, 2.5, 4.3);
+
+        var wall2 = BABYLON.Mesh.CreateBox("wall2", 5, scene);
+        wall2.position = new BABYLON.Vector3(-4.3, 2.5, 0);
+
+        var wall3 = BABYLON.Mesh.CreateBox("wall3", 5, scene);
+        wall3.position = new BABYLON.Vector3(4.3, 2.5, 0);
+
+        var wall4 = BABYLON.Mesh.CreateBox("wall4", 5, scene);
+        wall4.position = new BABYLON.Vector3(0, 6.5, 0);
+
+        var wall5 = BABYLON.Mesh.CreateBox("wall5", 5, scene);       
+        wall5.position = new BABYLON.Vector3(0, 2.5, -4.3);
+
+        wall.setPhysicsState({impostor: BABYLON.PhysicsEngine.BoxImpostor, mass: 0, restitution: 0.1, friction: 10});
+        wall2.setPhysicsState({impostor: BABYLON.PhysicsEngine.BoxImpostor, mass: 0, restitution: 0.1, friction: 10});
+        wall4.setPhysicsState({impostor: BABYLON.PhysicsEngine.BoxImpostor, mass: 0, restitution: 0.1, friction: 10});
+        wall3.setPhysicsState({impostor: BABYLON.PhysicsEngine.BoxImpostor, mass: 0, restitution: 0.1, friction: 10});
+        wall5.setPhysicsState({impostor: BABYLON.PhysicsEngine.BoxImpostor, mass: 0, restitution: 0.1, friction: 10});
+
+
+        var materialInvisible = new BABYLON.StandardMaterial("material1",scene);
+        materialInvisible.alpha = 0;
+
+        basket.material = materialInvisible;
+        goal.material = materialInvisible;
+        wall2.material = materialInvisible;
+        wall3.material = materialInvisible;
+        wall4.material = materialInvisible;
+        wall.material = materialInvisible;
+        wall5.material = materialInvisible;
 
         var material2 = new BABYLON.StandardMaterial("material2",scene);
-        // material1.wireframe = true;
         material2.diffuseColor = BABYLON.Color3.Red();
         material2.emmisiveColor = BABYLON.Color3.Red();
         material2.alpha = 1.0;
 
+        var materialBlue = new BABYLON.StandardMaterial("material2",scene);
+        materialBlue.diffuseColor = BABYLON.Color3.Blue();
+        materialBlue.emmisiveColor = BABYLON.Color3.Blue();
+        materialBlue.alpha = 1.0;
+
+        var materialBasket = new BABYLON.StandardMaterial("materialBasket", scene);
+        materialBasket.diffuseColor = new BABYLON.Color3(42, 21, 21);
+        materialBasket.emmisiveColor = new BABYLON.Color3(165, 42, 42);
+        materialBasket.specularPower = 100000;
+        materialBasket.alpha = 1.0;
+
         var groundMaterial = new BABYLON.StandardMaterial("groundMaterial", scene);
         groundMaterial.diffuseTexture = new BABYLON.Texture("texture/grass.png", scene);
-        groundMaterial.specularPower = 1000;
-        // sphere1.material = material1;
-        // peach.material = material2;
+        groundMaterial.specularPower = 10000;
+        groundMaterial.diffuseTexture.uScale = 5.0;
+        groundMaterial.diffuseTexture.vScale = 5.0;
+
         ground.material = groundMaterial;
 
-
-
+        //importing apple 
         var peach;
         var peachImpostor;
         BABYLON.SceneLoader.ImportMesh("","assets/", "apple.babylon", scene, function (newMeshes, particleSystems) {
@@ -80,32 +113,65 @@
           console.log(peach.scaling.x);
           peach.scaling = new BABYLON.Vector3(40, 40, 40);
           peach.position = new BABYLON.Vector3(0, 3, 0);
-          peachImpostor = peach.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.5, friction: 1, linearDamping: 0.5});
+          peachImpostor = peach.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.1, friction: 1, linearDamping: 0.5});
           peach.material = material2;
         });
-        // camera2 = new BABYLON.FollowCamera("camera2", new BABYLON.Vector3(0,15,-30), scene);
-        // camera2.lockedTarget = sphere1;
-        // camera2.radius = 30;
-        // camera2.heightOffset = 8;
-        // camera2.rotationOffset = 180;
+
+        //importing basket
+        var basketModel;
+        BABYLON.SceneLoader.ImportMesh("","assets/", "basket.babylon", scene, function (newMeshes, particleSystems) {
+          var thing = newMeshes[2];
+          thing.position = new BABYLON.Vector3(0, -10, 0);
+          basketModel = newMeshes[1];
+          basketModel.scaling = new BABYLON.Vector3(0.1, 0.1, 0.12);
+          basketModel.position = new BABYLON.Vector3(0, 0, 150);
+          basketModel.material = materialBlue;
+        });
+
+        //importing apples inside basket
+        var manyApples;
+        BABYLON.SceneLoader.ImportMesh("","assets/", "manyApples.babylon", scene, function (manyApples, particleSystems) {
+          manyApples = manyApples[0];
+          manyApples.scaling = new BABYLON.Vector3(75, 75, 75);
+          manyApples.position = new BABYLON.Vector3(-6.3, 20, 149);
+          manyApples.rotation.z = BABYLON.Tools.ToRadians(-35);
+          manyApples.rotation.x = BABYLON.Tools.ToRadians(-99);
+          manyApples.material = material2;
+        });
+
+        //skybox
+        var skybox = BABYLON.Mesh.CreateBox("skybox", 4000.0, scene);
+        var skyboxMaterial = new BABYLON.StandardMaterial("skybox", scene);
+        skyboxMaterial.backFaceCulling = false;
+        skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("assets/skybox/grass", scene);
+        skybox.infiniteDistance = true;
+        skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+        skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+        skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+        skybox.material=skyboxMaterial;
+
         scene.registerBeforeRender(function () {
       		if (peach) {
             if(peach.intersectsMesh(goal, false)){
               //increase point
+              var yay = new BABYLON.Sound("yay", "assets/sound/yay.mp3", scene, null, { loop: false, autoplay: true, volume: 0.5});
               point++;
               score.text = "Score: "+point.toString()+ "  ||  Wind: "+wind.toString();
               //reset peach
-              peach.dispose();
-              peach = BABYLON.Mesh.CreateSphere("peach", 16, 2, scene);
-              peach.position = new BABYLON.Vector3(0, 1.5, 0);
-              peach.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.5, friction: 1, linearDamping: 0.5});
+              wall.position.y = 2.5;
+              wall2.position.y = 2.5;
+              wall3.position.y = 2.5;
+              wall4.position.y = 6.5;
+              wall5.position.y = 2.5;
 
-              var material2 = new BABYLON.StandardMaterial("material2",scene);
-              material2.diffuseColor = BABYLON.Color3.Red();
-              material2.emmisiveColor = BABYLON.Color3.Red();
-              material2.alpha = 1.0;
-              peach.material = scene.getMaterialByName("material2");
+              wall.updatePhysicsBodyPosition();
+              wall2.updatePhysicsBodyPosition();
+              wall3.updatePhysicsBodyPosition();
+              wall4.updatePhysicsBodyPosition();
+              wall5.updatePhysicsBodyPosition();
 
+              peach.position = new BABYLON.Vector3(0, 2.5, 0);
+              peach.updatePhysicsBodyPosition();
               //return arrow
               arrow.position.y = 1;
 
@@ -119,16 +185,10 @@
         });
       //   return scene;
       // }
-
-
       // var scene = createScene();
       var switcher = 1;
       var map = {};
       var point = 0;
-
-      // var peach = scene.getMeshByName("peach");
-      // var arrow = scene.getMeshByName("arrow");
-      // var goal = scene.getMeshByName("goal");
 
       var speed = 50;
       //adjust direction of throw
@@ -139,9 +199,12 @@
       var wind = 0;
       var change = 0;
       var incr = 5;
+      var life = 5;
       //ScoreBoard
+      var w = window.innerWidth;
+      var h = window.innerHeight;
       var scoreBoard = new BABYLON.ScreenSpaceCanvas2D(scene, {
-        id: "canvas2",  parent: canvas,x:0, y:575,
+        id: "canvas2",  parent: canvas,x:0, y:h-100,
         size: new BABYLON.Size(300, 100),
         backgroundFill: "#4040408F",
         backgroundRoundRadius: 50,
@@ -152,12 +215,37 @@
           marginAlignment: "h: center, v:center",
           fontName: "20pt Arial",
       });
+      //Power Board
+      var powerBoard = new BABYLON.ScreenSpaceCanvas2D(scene, {
+        id: "canvas3",  parent: canvas,x:w-300, y:h-200,
+        size: new BABYLON.Size(300, 100),
+        backgroundFill: "#4040408F",
+        backgroundRoundRadius: 50,
+      });
+      var power = new BABYLON.Text2D("Power: 0", {
+          parent: powerBoard,
+          id: "speed",
+          marginAlignment: "h: center, v:center",
+          fontName: "20pt Arial",
+      });
+      //Life Board
+      var lifeBoard = new BABYLON.ScreenSpaceCanvas2D(scene, {
+        id: "canvas4",  parent: canvas,x:w-300, y:h-100,
+        size: new BABYLON.Size(300, 100),
+        backgroundFill: "#4040408F",
+        backgroundRoundRadius: 50,
+      });
+      var nyawa = new BABYLON.Text2D("Life: 5", {
+          parent: lifeBoard,
+          id: "nyawa",
+          marginAlignment: "h: center, v:center",
+          fontName: "20pt Arial",
+      });
 
-      //debug
-      // var radangle;
-      // var radanglevertical;
-      // var direction;
+      //Background music
+      var bgm = new BABYLON.Sound("BGM", "assets/sound/bgm.mp3", scene, null, { loop: true, autoplay: true, volume: 0.1});
 
+      //Game Input
       window.onkeydown = window.onkeyup = function(event){
         event = event || window.event;
         map[event.keyCode] = event.type == 'keydown';
@@ -180,17 +268,27 @@
         //space - throwing
         if(map[32]){
           //increase power while held
-          if(speed > 250){
+          if(speed >= 350){
             incr = incr * -1;
           }
-          if(speed <= 0){
+          else if(speed <= 0){
             incr = incr * -1;
           }
 
           speed += incr;
+          //Changing the speed into percent
+          var percent = Math.floor((speed/350)*100);
+          power.text="Power: "+percent.toString()+"%";
+
+          wall.position.y = -100;
+          wall2.position.y = -100;
+          wall3.position.y = -100;
+          wall4.position.y = -100;
+          wall5.position.y = -100;
+
         }else if(map[32] == false){
           //when released, launch ball
-          if(peach.position.z <= 0 && speed > 50){
+          if(peach.position.z <= 1 && speed > 50){
             //remove arrow
             arrow.position.y = -100;
             //apply wind
@@ -211,19 +309,20 @@
         if(map[82]){
           //remove then create new peach object
           score.text = "Score: "+point.toString()+ "  ||  Wind: "+wind.toString();
-          // peach.dispose();
-          // peach = BABYLON.Mesh.CreateSphere("peach", 16, 2, scene);
-          peachImpostor.velocity = new BABYLON.Vector3(0.1, 0.1, 0.1);
-          peach.position = new BABYLON.Vector3(0, 3, 0);
+          wall.position.y = 2.5;
+          wall2.position.y = 2.5;
+          wall3.position.y = 2.5;
+          wall4.position.y = 6.5;
+          wall5.position.y = 2.5;
+          wall.updatePhysicsBodyPosition();
+          wall2.updatePhysicsBodyPosition();
+          wall3.updatePhysicsBodyPosition();
+          wall4.updatePhysicsBodyPosition();
+          wall5.updatePhysicsBodyPosition();
+
+          peach.position = new BABYLON.Vector3(0, 2.5, 0);
           peach.updatePhysicsBodyPosition();
 
-          // peach.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.5, friction: 1, linearDamping: 0.5});
-
-          var material2 = new BABYLON.StandardMaterial("material2",scene);
-          material2.diffuseColor = BABYLON.Color3.Red();
-          material2.emmisiveColor = BABYLON.Color3.Red();
-          material2.alpha = 1.0;
-          peach.material = scene.getMaterialByName("material2");
 
           //return arrow
           arrow.position.y = 1;
@@ -233,11 +332,34 @@
 
           //reset speed
           speed = 50;
-          // peach.position = new BABYLON.Vector3(0, 1.5, 0);
-          // peach.mass = 0;
-          // peach.updateMassProperties();
-          // peach.velocity.set(0,0,0);
-          // peach.angularVelocity.set(0,0,0);
+
+          function reloadPage()
+          {
+            location.reload();
+          }
+
+          //reduce life
+          life--;
+          //game over screen
+          if(life==0){
+            bgm.stop();
+            var end = new BABYLON.Sound("gameEnd", "assets/sound/end.mp3", scene, null, { loop: false, autoplay: true, volume: 0.5});
+            var gameOver = new BABYLON.ScreenSpaceCanvas2D(scene, {
+            id: "canvas5",  parent: canvas,x:0, y:0,
+            size: new BABYLON.Size(w, h),
+            backgroundFill: "#404040FF",
+            });
+             var finscore = new BABYLON.Text2D("Your Final Score: "+point.toString(), {
+              parent: gameOver,
+              id: "finscore",
+              marginAlignment: "h: center, v:center",
+              fontName: "20pt Arial",
+              });
+            setTimeout(function(){
+              reloadPage();}, 4000);
+          }
+          nyawa.text="Life: "+life.toString();
+
         }
       }
 
@@ -245,41 +367,13 @@
         if(thrown){
           thrown = false;
           change = Math.random()*10;
-          if(change <= 4){
-            wind = Math.floor(Math.random()*10.9)-5;
+          if(change <= 6){
+            wind = Math.floor(Math.random()*20.9)-10;
           }
         }
 
-        //if touch goal
-        // if(peach.intersectsMesh(goal, false)){
-        //   //increase point
-        //   point++;
-        //   score.text = "Score: "+point.toString()+ "  ||  Wind: "+wind.toString();
-        //   //reset peach
-        //   peach.dispose();
-        //   peach = BABYLON.Mesh.CreateSphere("peach", 16, 2, scene);
-        //   peach.position = new BABYLON.Vector3(0, 1.5, 0);
-        //   peach.setPhysicsState({impostor: BABYLON.PhysicsEngine.SphereImpostor, mass: 5, restitution: 0.5, friction: 1, linearDamping: 0.5});
-        //
-        //   var material2 = new BABYLON.StandardMaterial("material2",scene);
-        //   material2.diffuseColor = BABYLON.Color3.Red();
-        //   material2.emmisiveColor = BABYLON.Color3.Red();
-        //   material2.alpha = 1.0;
-        //   peach.material = scene.getMaterialByName("material2");
-        //
-        //   //return arrow
-        //   arrow.position.y = 1;
-        //
-        //   //reset wind
-        //   phyEng.setGravity(new BABYLON.Vector3(0, -9.81, 0));
-        //
-        //   //reset speed
-        //   speed = 50;
-        // }
-        //changing direction of arrow
         arrow.rotation.y = BABYLON.Tools.ToRadians(angle);
         arrow.rotation.x = BABYLON.Tools.ToRadians(-anglevertical);
-
 
         scene.render();
       });
