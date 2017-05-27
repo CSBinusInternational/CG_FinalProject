@@ -137,6 +137,17 @@
           //basketModel.material = materialBasket;
         });
 
+        //skybox
+        var skybox = BABYLON.Mesh.CreateBox("skybox", 4000.0, scene);
+        var skyboxMaterial = new BABYLON.StandardMaterial("skybox", scene);
+        skyboxMaterial.backFaceCulling = false;
+        skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("assets/skybox/grass", scene);
+        skybox.infiniteDistance = true;
+        skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+        skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+        skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+        skybox.material=skyboxMaterial;
+
         scene.registerBeforeRender(function () {
       		if (peach) {
             if(peach.intersectsMesh(goal, false)){
