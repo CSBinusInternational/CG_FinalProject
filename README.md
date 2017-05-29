@@ -52,6 +52,13 @@ Project Description
 Our group consists of two members Cason (in charge of GUI and Models) and Dhyatmika Suriyanto (in charge of game mechanics). This is a game we created for our final project in the Computer Graphics course at Binus International. 
 We came up with the project idea based on paper toss as our inspiration but instead of paper toss we changed it into apple toss and called it The Furious Farmer. Our game is a web based game made with Babylon.js. The Goal of the game is to throw an apple into a basket and score the most points.
 To make the game more challenging we added physics, life and wind. And the user can also adjust the power of each shot. We also added sound and a lot of models to make the game more pleasing to look at aesthetically 
+
+How to play the game
+-	First clone or download the whole project
+-	In the src folder you will find fruit_throw.html
+-	Open fruit_throw.html with a browser (preferably Mozilla)
+-	Enjoy the game
+
  
 Core Gameplay Mechanics Brief
 - Physics: the game uses the CannonJS physics plugin to simulate the gravity and wind happening inside the game
@@ -64,6 +71,10 @@ Core Gameplay Mechanics Brief
 			- R to reset the ball to the original position
 Targeted platforms
 	- Web: This game is made to be a web based game played on browsers.
+
+Limitations
+	-	If the apple falls off the arena the apple cannot be reset into place
+
 
 Project Scope 
 	- The project took about one month to complete including the model preparation and mechanics.
