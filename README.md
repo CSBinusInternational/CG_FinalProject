@@ -1,5 +1,6 @@
+</center>
 
-THE FURIOUS FARMER
+<h1>THE FURIOUS FARMER</h1>
 
 <center><img src="screenshots/binusLogo.png"></center>
  
@@ -20,7 +21,7 @@ Feel free to Modify, redistribute but not sell this document.
 
 
 TL;DR - Keep the credits section of this document intact and we are good and do not sell it.
-
+</center>
 Table of Content
 Overview
 Theme / Setting / Genre
