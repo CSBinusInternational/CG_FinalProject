@@ -23,7 +23,6 @@ Feel free to Modify, redistribute but not sell this document.
 TL;DR - Keep the credits section of this document intact and we are good and do not sell it.
 </center>
 ## Table of Content
-## Table of Content
 - Overview
 - Theme / Setting / Genre
 - Project Description
