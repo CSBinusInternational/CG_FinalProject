@@ -40,7 +40,7 @@ Full Coding
 - <Put your group CS Github url/link>
 Screenshot of the Game
 
-##Overview
+## Overview
 
 
 
@@ -73,10 +73,10 @@ To make the game more challenging we added physics, life and wind. And the user 
 	- Web: This game is made to be a web based game played on browsers.
 
 ## Limitations
-	-	If the apple falls off the arena the apple cannot be reset into place
+	- If the apple falls off the arena the apple cannot be reset into place
 
 
-##Project Scope 
+## Project Scope 
 	- The project took about one month to complete including the model preparation and mechanics.
 - Core Team
 	- Cason 1901521236 + Casoncase (Gitlab account)
