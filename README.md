@@ -23,22 +23,21 @@ Feel free to Modify, redistribute but not sell this document.
 TL;DR - Keep the credits section of this document intact and we are good and do not sell it.
 </center>
 ## Table of Content
-Overview
-Theme / Setting / Genre
-Project Description
-Core Gameplay Mechanics Brief
-Targeted platforms
-Project Scope
-Story and Gameplay
-Story
-Gameplay
-Assets Needed
-- 2D
-- 3D
-- Sound
-Full Coding
-- <Put your group CS Github url/link>
-Screenshot of the Game
+## Table of Content
+- Overview
+- Theme / Setting / Genre
+- Project Description
+- Core Gameplay Mechanics Brief
+- Project Scope
+- Story and Gameplay
+- Story
+- Gameplay
+- Assets Needed
+	- 2D
+	- 3D
+	- Sound
+- Full Coding
+- Screenshot of the Game
 
 ## Overview
 
